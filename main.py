@@ -74,7 +74,12 @@ class App:
 # Funkcija za dodavanje novog proizvoda
 def add_proizvod():
     naziv =input("Naziv proizvoda> ").strip()
-    cena = float(input("Cena proizvoda> ").strip())
+    while True:
+        try:
+            cena = float(input("Cena proizvoda> ").strip())
+            break
+        except ValueError:
+            print("Greška: Unesite validan broj za cenu.")
     proizvodjac = input("Proizvođač> ").strip()
     proizvod = {
         "id": app.current_proizvod_id + 1,
@@ -132,7 +137,10 @@ def update_proizvod():
 
             nova_cena = input(f"Unesite novu cenu ({proizvod['cena']})> ").strip()
             if nova_cena:
-                proizvod["cena"] = float(nova_cena)
+                try:
+                    proizvod["cena"] = float(nova_cena)
+                except ValueError:
+                    print("Greška: Cena nije ažurirana jer uneta vrednost nije validan broj.")
 
             novi_proizvodjac = input(f"Unesite novog proizvođača ({proizvod['proizvodjac']})> ").strip()
             if novi_proizvodjac:
@@ -164,6 +172,9 @@ def load_data():
                 }
                 app.proizvodi.append(proizvod)
                 app.current_proizvod_id = max(app.current_proizvod_id, int(id))
+    except ValueError:
+        print("Pogrešan format falja!")
+        exit(-1)
     except FileNotFoundError:
         print("Nije pronađen fajl sa podacima. Početak sa praznom listom proizvoda.")
 
